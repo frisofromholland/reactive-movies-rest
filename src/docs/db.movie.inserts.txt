@@ -1,0 +1,1 @@
+db.movie.insert({"title":"Mission Impossible: Fallout", "description":"Another MI movie","year":"2018","trailerLink":"https://www.youtube.com/watch?v=wb49-oV0F78"})
