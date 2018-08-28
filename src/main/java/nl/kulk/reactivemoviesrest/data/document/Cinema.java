@@ -1,4 +1,4 @@
-package nl.kulk.reactivemoviesrest.data;
+package nl.kulk.reactivemoviesrest.data.document;
 
 import lombok.Getter;
 import lombok.Setter;

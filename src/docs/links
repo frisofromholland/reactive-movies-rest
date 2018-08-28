@@ -4,14 +4,19 @@ https://docs.spring.io/spring-data/mongodb/docs/2.0.8.RELEASE/reference/html/#re
       --> Spring Data MongoDb v.1.10+ suopprots MongoDB 3.4
       --> Spring Data MongoDb v.2.0+ has reactive MongoDB support
 
+Basic Spring Data configuration MongodDB:  https://www.baeldung.com/spring-data-mongodb-reactive
+
 #MongoDB
 
-System rquirements: https://docs.mongodb.com/manual/installation/#tutorial-installation
+System requirements: https://docs.mongodb.com/manual/installation/#tutorial-installation
       --> Debian 8
-      -->
-installation com. vers. on Debian: https://docs.mongodb.com/manual/administration/install-on-linux/
+
+installation com.vers. on Debian: https://docs.mongodb.com/manual/administration/install-on-linux/
                                    https://docs.mongodb.com/v3.4/tutorial/install-mongodb-on-debian/
 
 Starter tutorial: https://www.tutorialspoint.com/mongodb/mongodb_overview.htm
 
 mongo shell quick reference:  https://docs.mongodb.com/manual/reference/mongo-shell/
+
+#Spring Project Reactor
+INtro tutorial:  https://www.baeldung.com/reactor-core
