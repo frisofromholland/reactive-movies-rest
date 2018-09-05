@@ -20,3 +20,6 @@ mongo shell quick reference:  https://docs.mongodb.com/manual/reference/mongo-sh
 
 #Spring Project Reactor
 INtro tutorial:  https://www.baeldung.com/reactor-core
+
+#Jsoup scrapper
+          --> https://jsoup.org/cookbook/extracting-data/dom-navigation
