@@ -10,9 +10,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
 /**
- * User: frisokulk
- * Date: 8/28/18
- * Time: 11:42 PM
+ *
  */
 @EnableWebSecurity
 @Configuration

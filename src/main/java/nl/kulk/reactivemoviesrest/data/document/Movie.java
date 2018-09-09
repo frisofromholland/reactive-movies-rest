@@ -7,11 +7,11 @@ import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.List;
+
 
 /**
- * User: frisokulk
- * Date: 8/25/18
- * Time: 9:52 PM
+ *
  */
 @Document(collection = "movie")
 @Getter
@@ -31,7 +31,7 @@ public class Movie {
 
     private String trailerLink;
 
-    private Screening[] screenings;
+    private List<Screening> screenings;
 
 
 }

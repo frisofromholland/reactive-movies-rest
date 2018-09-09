@@ -2,7 +2,7 @@ package nl.kulk.reactivemoviesrest.web.controller;
 
 import nl.kulk.reactivemoviesrest.data.document.Movie;
 import nl.kulk.reactivemoviesrest.data.repository.MovieRepository;
-import nl.kulk.reactivemoviesrest.service.MovieScraperService;
+import nl.kulk.reactivemoviesrest.service.movie.MovieScraperService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
