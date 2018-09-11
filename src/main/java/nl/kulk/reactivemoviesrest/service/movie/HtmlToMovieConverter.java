@@ -20,9 +20,11 @@ import java.util.stream.Collectors;
 public class HtmlToMovieConverter {
 
     public static final String MOVIE_CONTAINER_CLASS = "city-movie";
-    public static final String MOVIE_TITLE_CLASS = "movie-link";
-    public static final String CINIMA_CONTAINER_CLASS = "hall-container";
+    public static final String CINIMAS_CONTAINER_CLASS = "hall-container";
     public static final String CINEMA_TITLE_CLASS = "cinema-link";
+    public static final String ATTRIBUTE_KEY_ITEM_PROP = "itemprop";
+    public static final String ATTRIBUTE_KEY_CONTENT = "content";
+    public static final String ATTRIBUTE_VALUE_START_DATE = "startDate";
 
 
     public List<Movie> convert(final Document htmlDocument) {
@@ -40,13 +42,10 @@ public class HtmlToMovieConverter {
 
     private Movie convertToMovieDocument(final Element singleMovieElement) {
 
-
         final Movie movie = convertMovie(singleMovieElement);
         movie.setScreenings(convertScreenings(singleMovieElement));
 
-
         return movie;
-
     }
 
     private Movie convertMovie(final Element singleMovieElement) {
@@ -66,49 +65,48 @@ public class HtmlToMovieConverter {
 
         final List<Screening> screenings = new ArrayList<>();
 
-        final Elements venueAndScreeningsElements = singleMovieElement.getElementsByClass(CINIMA_CONTAINER_CLASS);
+        final Elements cinemaAndScreeningsElements = singleMovieElement.getElementsByClass(CINIMAS_CONTAINER_CLASS);
 
-        //TODO This is not the cinema's name yet, but the movie title
-        final Optional<String> cinemaOptional = singleMovieElement.getElementsByClass(CINEMA_TITLE_CLASS)
-                .stream()
-                .map(el -> el.text())
-                .findFirst();
+        for (Element cinemaAndScreeningsElement : cinemaAndScreeningsElements) {
 
+            final Optional<String> cinemaOptional = cinemaAndScreeningsElement.getElementsByClass(CINEMA_TITLE_CLASS)
+                    .stream()
+                    .map(el -> el.text())
+                    .findFirst();
 
-        if (cinemaOptional.isPresent()) {
-            final Cinema venue = new Cinema();
-            venue.setName(cinemaOptional.get());
-            for (Element venueAndScreeningsElement : venueAndScreeningsElements) {
-                screenings.addAll(convertScreeningForCinema(venueAndScreeningsElement, venue));
+            if (cinemaOptional.isPresent()) {
+                final Cinema cinema = new Cinema();
+                cinema.setName(cinemaOptional.get());
+                screenings.addAll(convertScreeningsForSingleCinema(cinemaAndScreeningsElement, cinema));
             }
         }
 
         return screenings;
     }
 
-    private List<Screening> convertScreeningForCinema(final Element singleVenueAndScreeningsElement, final Cinema venue) {
+    private List<Screening> convertScreeningsForSingleCinema(final Element singleCinemaAndScreeningsElement, final Cinema cinema) {
 
         final Screening screening = new Screening();
-        screening.setCinema(venue);
+        screening.setCinema(cinema);
 
-        final List<Screening> screenings = singleVenueAndScreeningsElement.getElementsByAttributeValue("itemprop","startDate")
+        final List<Screening> screenings = singleCinemaAndScreeningsElement.getElementsByAttributeValue(ATTRIBUTE_KEY_ITEM_PROP, ATTRIBUTE_VALUE_START_DATE)
                 .stream()
-                .map(el -> el.attr("content"))
-                .map(st -> buildScreening(st, venue))
+                .map(el -> el.attr(ATTRIBUTE_KEY_CONTENT))
+                .map(st -> buildScreening(st, cinema))
                 .filter(sc -> sc != null)
                 .collect(Collectors.toList());
 
         return screenings;
     }
 
-    private Screening buildScreening(final String startDateTimestring, final Cinema venue) {
+    private Screening buildScreening(final String startDateTimestring, final Cinema cinema) {
 
         Screening screening = null;
 
         if (startDateTimestring != null && startDateTimestring.contains("T") && startDateTimestring.contains("+")) {
             screening = new Screening();
-            screening.setCinema(venue);
-           screening.setStartDateTime(startDateTimestring);
+            screening.setCinema(cinema);
+            screening.setStartDateTime(startDateTimestring);
         }
 
         return screening;

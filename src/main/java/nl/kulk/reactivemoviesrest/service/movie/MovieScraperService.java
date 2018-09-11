@@ -10,7 +10,6 @@ import org.jsoup.nodes.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.Flux;
 
 import java.io.File;
 import java.io.IOException;
@@ -69,8 +68,10 @@ public class MovieScraperService extends BaseETL<Document, List<Movie>> {
 
     @Override
     public void load(List<Movie> transformedData) {
-        final Flux<Movie> movieFlux = movieRepository.insert(transformedData);
-        movieFlux.blockLast();
+        //First delete old documents
+        movieRepository.findAll().flatMap(m -> movieRepository.delete(m)).blockLast();
+        //Then insert new ones
+        movieRepository.insert(transformedData).blockLast();
     }
 
 

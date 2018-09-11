@@ -10,9 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 
 /**
- * User: frisokulk
- * Date: 8/28/18
- * Time: 10:13 PM
+ *
  */
 @RestController
 @RequestMapping("/movies")
