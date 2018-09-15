@@ -6,10 +6,10 @@
     <groupId>nl.kulk</groupId>
     <artifactId>reactive-movies-rest</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>jar</packaging>
+    <packaging>war</packaging>
 
     <name>reactive-movies-rest</name>
-    <description>Demo project for Spring Boot</description>
+    <description>Reactie REST service for movies staged in the Netherlands</description>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -77,7 +77,6 @@
             <version>3.0</version>
         </dependency>
 
-
     </dependencies>
 
     <build>
@@ -88,6 +87,5 @@
             </plugin>
         </plugins>
     </build>
-
 
 </project>

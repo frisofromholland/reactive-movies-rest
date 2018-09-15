@@ -12,7 +12,5 @@ public class Screening {
 
     private Cinema cinema;
 
-    private String day;
-
     private String startDateTime;
 }

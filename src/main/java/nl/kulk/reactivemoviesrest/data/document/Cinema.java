@@ -11,8 +11,8 @@ import org.springframework.data.annotation.Id;
 @Setter
 public class Cinema {
 
-    private String Name;
+    private String name;
 
-    private String City;
+    private String city;
 
 }

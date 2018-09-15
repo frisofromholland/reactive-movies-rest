@@ -4,56 +4,48 @@ import lombok.extern.slf4j.Slf4j;
 import nl.kulk.reactivemoviesrest.data.document.Movie;
 import nl.kulk.reactivemoviesrest.data.repository.MovieRepository;
 import nl.kulk.reactivemoviesrest.service.etl.BaseETL;
-import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 /**
- * ETL service that scrapes movies form specified url and loads them into the database
+ * ETL service that scrapes movies form specified baseUrl and loads them into the database
  */
 @Service
 @Slf4j
-public class MovieScraperService extends BaseETL<Document, List<Movie>> {
+public class MovieScraperService extends BaseETL<String, Document, List<Movie>> {
 
 
     @Autowired
     private HtmlToMovieConverter htmlToMovieConverter;
-
-
     @Autowired
     private MovieRepository movieRepository;
 
-
-    //TODO "https://www.filmladder.nl/amsterdam/films";
-    @Value("${movies.url: }")
-    private String url;
+    private static final String baseUrl = "https://www.filmladder.nl/";
+    private static final List<String> cities = Arrays.asList(new String[]{"amsterdam", "rotterdam", "utrecht"});
 
 
-    //@Scheduled(cron = "0 0 14 * * *")
     public void scrapeMovies() {
-        extractTransformLoad();
+        //First delete old documents
+        movieRepository.findAll().flatMap(m -> movieRepository.delete(m)).blockLast();
+        //Then insert new ones
+        for (String city : cities) {
+            extractTransformLoad(city);
+        }
     }
 
     @Override
-    public Document extract() {
+    public Document extract(final String city) {
 
         Document html = new Document("");
-        try {
 
-            if (StringUtils.isNotBlank(url)) {
-                //TODO certificate in truststore: https://stackoverflow.com/questions/7744075/how-to-connect-via-https-using-jsoup
-                html = Jsoup.connect(url).get();
-            } else {
-                final File file = new File("/home/frisokulk/Development/playground/rest/reactive-movies-rest/src/main/resources/filmladder_amsterdam_page_20180905.txt");
-                html = Jsoup.parse(file, "UTF-8");
-            }
+        try {
+            html = Jsoup.connect(baseUrl + city + "/films").get();
         } catch (IOException e) {
             log.error("Error collecting movie data", e);
         }
@@ -68,9 +60,6 @@ public class MovieScraperService extends BaseETL<Document, List<Movie>> {
 
     @Override
     public void load(List<Movie> transformedData) {
-        //First delete old documents
-        movieRepository.findAll().flatMap(m -> movieRepository.delete(m)).blockLast();
-        //Then insert new ones
         movieRepository.insert(transformedData).blockLast();
     }
 

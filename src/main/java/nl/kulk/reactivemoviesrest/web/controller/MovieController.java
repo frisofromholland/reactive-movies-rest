@@ -5,6 +5,7 @@ import nl.kulk.reactivemoviesrest.data.repository.MovieRepository;
 import nl.kulk.reactivemoviesrest.service.movie.MovieScraperService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
@@ -17,17 +18,19 @@ import reactor.core.publisher.Flux;
 public class MovieController {
 
 
-    @Autowired
-    private MovieScraperService movieScraperService;
 
     @Autowired
     private MovieRepository movieRepository;
 
 
-    @GetMapping
+    @GetMapping()
     public Flux<Movie> findAll() {
-        movieScraperService.scrapeMovies();
         return movieRepository.findAll();
+    }
+
+    @GetMapping("/{city}")
+    public Flux<Movie> findByCity(@PathVariable("city") String city) {
+        return movieRepository.findByScreeningsCinemaCity(city);
     }
 
 

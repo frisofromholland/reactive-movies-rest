@@ -30,20 +30,21 @@ public class HtmlToMovieConverter {
     public List<Movie> convert(final Document htmlDocument) {
 
         final Elements singleMovieElements = htmlDocument.getElementsByClass(MOVIE_CONTAINER_CLASS);
+        final String city = htmlDocument.location().substring("https://www.filmladder.nl/".length(), htmlDocument.location().lastIndexOf("/"));
 
         final List<Movie> movieDocuments = singleMovieElements
                 .stream()
-                .map(el -> convertToMovieDocument(el))
+                .map(el -> convertToMovieDocument(el, city))
                 .collect(Collectors.toList());
 
         return movieDocuments;
     }
 
 
-    private Movie convertToMovieDocument(final Element singleMovieElement) {
+    private Movie convertToMovieDocument(final Element singleMovieElement, final String city) {
 
         final Movie movie = convertMovie(singleMovieElement);
-        movie.setScreenings(convertScreenings(singleMovieElement));
+        movie.setScreenings(convertScreenings(singleMovieElement, city));
 
         return movie;
     }
@@ -61,7 +62,7 @@ public class HtmlToMovieConverter {
         return movie;
     }
 
-    private List<Screening> convertScreenings(final Element singleMovieElement) {
+    private List<Screening> convertScreenings(final Element singleMovieElement, final String city) {
 
         final List<Screening> screenings = new ArrayList<>();
 
@@ -77,6 +78,7 @@ public class HtmlToMovieConverter {
             if (cinemaOptional.isPresent()) {
                 final Cinema cinema = new Cinema();
                 cinema.setName(cinemaOptional.get());
+                cinema.setCity(city);
                 screenings.addAll(convertScreeningsForSingleCinema(cinemaAndScreeningsElement, cinema));
             }
         }

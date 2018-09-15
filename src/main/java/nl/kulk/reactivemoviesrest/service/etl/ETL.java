@@ -3,10 +3,10 @@ package nl.kulk.reactivemoviesrest.service.etl;
 /**
  * Interface for implementations of Extract/Transform/Load pattern
  */
-public interface ETL<E, T> {
+public interface ETL<I,E, T> {
 
 
-    E extract();
+    E extract(I input);
 
     T transform(E extractedData);
 
